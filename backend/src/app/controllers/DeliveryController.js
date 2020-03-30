@@ -108,11 +108,19 @@ class DeliveryController {
   async delete(req, res) {
     const { id } = req.params;
 
-    const deliveryRows = await Delivery.destroy({ where: { id } });
+    const delivery = await Delivery.findByPk(id);
 
-    if (deliveryRows <= 0) {
+    if (!delivery) {
       return res.status(404).json({ error: 'Delivery not found' });
     }
+
+    if (delivery.start_date) {
+      return res.status(400).json({
+        error: 'Delivery cannot be deleted. Someone is delivering this package',
+      });
+    }
+
+    await delivery.destroy();
 
     return res.status(204).send();
   }
