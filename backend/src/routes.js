@@ -7,6 +7,7 @@ import RecipientController from './app/controllers/RecipientController';
 import DeliveryManController from './app/controllers/DeliveryManController';
 import FileController from './app/controllers/FileController';
 import DeliveryController from './app/controllers/DeliveryController';
+import DeliveryManagementController from './app/controllers/DeliveryManagementController';
 
 import ValidateSessionStore from './app/Validators/SessionStore';
 import ValidateRecipientStore from './app/Validators/RecipientStore';
@@ -22,6 +23,18 @@ const routes = new Router();
 const uploads = multer(multerConfig);
 
 routes.post('/sessions', ValidateSessionStore, SessionController.store);
+
+routes.get(
+  '/deliveryman/:id/deliveries',
+  DeliveryManagementController.showDeliveredPackages
+);
+
+routes.get('/deliveryman/:id', DeliveryManagementController.index);
+
+routes.put(
+  '/deliveryman/:deliverymanId/delivery/:deliveryId',
+  DeliveryManagementController.update
+);
 
 // All routes below will be authenticated.
 routes.use(authMiddleware);
