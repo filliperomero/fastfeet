@@ -8,6 +8,7 @@ import DeliveryManController from './app/controllers/DeliveryManController';
 import FileController from './app/controllers/FileController';
 import DeliveryController from './app/controllers/DeliveryController';
 import DeliveryManagementController from './app/controllers/DeliveryManagementController';
+import DeliveryProblemController from './app/controllers/DeliveryProblemController';
 
 import ValidateSessionStore from './app/Validators/SessionStore';
 import ValidateRecipientStore from './app/Validators/RecipientStore';
@@ -35,6 +36,8 @@ routes.put(
   '/deliveryman/:deliverymanId/delivery/:deliveryId',
   DeliveryManagementController.update
 );
+
+routes.post('/delivery/:id/problems', DeliveryProblemController.create);
 
 // All routes below will be authenticated.
 routes.use(authMiddleware);
@@ -70,5 +73,9 @@ routes.put(
   DeliveryController.update
 );
 routes.delete('/deliveries/:id', DeliveryController.delete);
+
+routes.get('/delivery/:id/problems', DeliveryProblemController.indexSpecific);
+routes.get('/deliveries/problems', DeliveryProblemController.index);
+routes.delete('/problem/:id/cancel-delivery', DeliveryProblemController.delete);
 
 export default routes;
