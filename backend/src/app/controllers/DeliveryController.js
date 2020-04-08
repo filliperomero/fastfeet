@@ -74,35 +74,16 @@ class DeliveryController {
       return res.status(404).json({ error: 'Delivery not found' });
     }
 
-    // TODO: remove the req.body and send a correct object
+    if (delivery.canceled_at || delivery.end_date) {
+      return res.status(403).json({
+        error:
+          'You cannot update a delivery that has already been delivered/canceled',
+      });
+    }
+
     await delivery.update(req.body);
 
-    const deliveryUpdated = await Delivery.findByPk(req.params.id, {
-      attributes: ['id', 'product', 'canceled_at', 'start_date', 'end_date'],
-      include: [
-        { model: File, as: 'signature', attributes: ['id', 'path', 'url'] },
-        {
-          model: DeliveryMan,
-          as: 'deliveryman',
-          attributes: ['name', 'email'],
-        },
-        {
-          model: Recipient,
-          as: 'recipient',
-          attributes: [
-            'name',
-            'street',
-            'number',
-            'complement',
-            'state',
-            'city',
-            'zipCode',
-          ],
-        },
-      ],
-    });
-
-    return res.json(deliveryUpdated);
+    return res.json(delivery);
   }
 
   async delete(req, res) {
