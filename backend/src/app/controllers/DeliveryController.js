@@ -1,3 +1,5 @@
+import { Op } from 'sequelize';
+
 import Delivery from '../models/Delivery';
 import File from '../models/File';
 import DeliveryMan from '../models/DeliveryMan';
@@ -7,21 +9,23 @@ import DeliveryRegistrationMail from '../jobs/DeliveryRegistrationMail';
 import Queue from '../../lib/Queue';
 
 class DeliveryController {
-  async index(req, res) {
-    // TODO: add a page system here
-    const deliveries = await Delivery.findAll({
+  async indexSpecific(req, res) {
+    const { id } = req.params;
+
+    const delivery = await Delivery.findByPk(id, {
       attributes: ['id', 'product', 'canceled_at', 'start_date', 'end_date'],
       include: [
         { model: File, as: 'signature', attributes: ['id', 'path', 'url'] },
         {
           model: DeliveryMan,
           as: 'deliveryman',
-          attributes: ['name', 'email'],
+          attributes: ['id', 'name', 'email'],
         },
         {
           model: Recipient,
           as: 'recipient',
           attributes: [
+            'id',
             'name',
             'street',
             'number',
@@ -33,6 +37,83 @@ class DeliveryController {
         },
       ],
     });
+
+    if (!delivery) {
+      return res.status(404).json({ error: 'Delivery not found' });
+    }
+
+    return res.json(delivery);
+  }
+
+  async index(req, res) {
+    const { q: product, page = 1 } = req.query;
+
+    const deliveries = product
+      ? await Delivery.findAll({
+          where: { product: { [Op.iLike]: `%${product}%` } },
+          attributes: [
+            'id',
+            'product',
+            'canceled_at',
+            'start_date',
+            'end_date',
+          ],
+          include: [
+            { model: File, as: 'signature', attributes: ['id', 'path', 'url'] },
+            {
+              model: DeliveryMan,
+              as: 'deliveryman',
+              attributes: ['name', 'email'],
+            },
+            {
+              model: Recipient,
+              as: 'recipient',
+              attributes: [
+                'name',
+                'street',
+                'number',
+                'complement',
+                'state',
+                'city',
+                'zipCode',
+              ],
+            },
+          ],
+          offset: (page - 1) * 10,
+          limit: 10,
+        })
+      : await Delivery.findAll({
+          attributes: [
+            'id',
+            'product',
+            'canceled_at',
+            'start_date',
+            'end_date',
+          ],
+          include: [
+            { model: File, as: 'signature', attributes: ['id', 'path', 'url'] },
+            {
+              model: DeliveryMan,
+              as: 'deliveryman',
+              attributes: ['name', 'email'],
+            },
+            {
+              model: Recipient,
+              as: 'recipient',
+              attributes: [
+                'name',
+                'street',
+                'number',
+                'complement',
+                'state',
+                'city',
+                'zipCode',
+              ],
+            },
+          ],
+          offset: (page - 1) * 10,
+          limit: 10,
+        });
 
     if (!deliveries || deliveries.length <= 0) {
       res.status(404).json({ error: 'Deliveries not found' });

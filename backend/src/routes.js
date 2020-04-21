@@ -66,6 +66,7 @@ routes.put(
 routes.delete('/deliveryman/:id', DeliveryManController.delete);
 
 routes.get('/deliveries', DeliveryController.index);
+routes.get('/deliveries/:id', DeliveryController.indexSpecific);
 routes.post('/deliveries', ValidateDeliveryStore, DeliveryController.store);
 routes.put(
   '/deliveries/:id',
