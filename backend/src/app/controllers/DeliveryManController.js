@@ -1,15 +1,33 @@
+import { Op } from 'sequelize';
 import DeliveryMan from '../models/DeliveryMan';
 import File from '../models/File';
 
 class DeliveryManController {
   async index(req, res) {
-    // TODO: add a page system here
-    const deliveryMen = await DeliveryMan.findAll({
-      attributes: ['id', 'name', 'email'],
-      include: [
-        { model: File, as: 'avatar', attributes: ['id', 'path', 'url'] },
-      ],
-    });
+    const { q: deliverymanName, page = 1 } = req.query;
+
+    const deliveryMen = deliverymanName
+      ? await DeliveryMan.findAll({
+          where: {
+            name: {
+              [Op.iLike]: `%${deliverymanName}%`,
+            },
+          },
+          attributes: ['id', 'name', 'email'],
+          include: [
+            { model: File, as: 'avatar', attributes: ['id', 'path', 'url'] },
+          ],
+          offset: (page - 1) * 5,
+          limit: 5,
+        })
+      : await DeliveryMan.findAll({
+          attributes: ['id', 'name', 'email'],
+          include: [
+            { model: File, as: 'avatar', attributes: ['id', 'path', 'url'] },
+          ],
+          offset: (page - 1) * 5,
+          limit: 5,
+        });
 
     if (!deliveryMen || deliveryMen.length <= 0) {
       res.status(404).json({ error: 'Delivery men not found' });
