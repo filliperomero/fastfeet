@@ -30,7 +30,7 @@ class DeliveryManController {
         });
 
     if (!deliveryMen || deliveryMen.length <= 0) {
-      res.status(404).json({ error: 'Delivery men not found' });
+      return res.status(404).json({ error: 'Delivery men not found' });
     }
 
     return res.json(deliveryMen);
