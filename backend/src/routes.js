@@ -30,7 +30,7 @@ routes.get(
   DeliveryManagementController.showDeliveredPackages
 );
 
-routes.get('/deliveryman/:id', DeliveryManagementController.index);
+routes.get('/deliveryman/:id/available', DeliveryManagementController.index);
 
 routes.put(
   '/deliveryman/:deliverymanId/delivery/:deliveryId',
@@ -53,6 +53,7 @@ routes.put(
 );
 
 routes.get('/deliveryman', DeliveryManController.index);
+routes.get('/deliveryman/:id', DeliveryManController.indexSpecific);
 routes.post(
   '/deliveryman',
   ValidateDeliveryManStore,

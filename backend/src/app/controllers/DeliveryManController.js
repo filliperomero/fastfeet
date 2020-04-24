@@ -1,8 +1,28 @@
+import fs from 'fs';
+import path from 'path';
 import { Op } from 'sequelize';
 import DeliveryMan from '../models/DeliveryMan';
+import Delivery from '../models/Delivery';
 import File from '../models/File';
 
 class DeliveryManController {
+  async indexSpecific(req, res) {
+    const { id } = req.params;
+
+    const deliveryman = await DeliveryMan.findByPk(id, {
+      attributes: ['id', 'name', 'email'],
+      include: [
+        { model: File, as: 'avatar', attributes: ['id', 'path', 'url'] },
+      ],
+    });
+
+    if (!deliveryman) {
+      return res.status(404).json({ error: 'Deliveryman not found' });
+    }
+
+    return res.json(deliveryman);
+  }
+
   async index(req, res) {
     const { q: deliverymanName, page = 1 } = req.query;
 
@@ -80,11 +100,42 @@ class DeliveryManController {
   async delete(req, res) {
     const { id } = req.params;
 
-    const deliveryManRows = await DeliveryMan.destroy({ where: { id } });
+    const deliveryman = await DeliveryMan.findByPk(id, {
+      include: [
+        {
+          model: File,
+          as: 'avatar',
+          attributes: ['id', 'path', 'url'],
+        },
+      ],
+    });
 
-    if (deliveryManRows <= 0) {
-      return res.status(404).json({ error: 'Delivery man not found' });
+    if (!deliveryman) {
+      return res.status(404).json({ error: 'Deliveryman not found' });
     }
+
+    const delivery = await Delivery.findOne({
+      where: { deliveryman_id: id, end_date: null },
+    });
+
+    if (delivery) {
+      return res.status(403).json({
+        error: 'Cannot delete this deliveryman, he is delivering a package',
+      });
+    }
+
+    if (deliveryman.avatar !== null) {
+      fs.unlink(
+        `${path.resolve(__dirname, '..', '..', '..', 'tmp', 'uploads')}/${
+          deliveryman.avatar.path
+        }`,
+        err => {
+          if (err) console.log(err);
+        }
+      );
+    }
+
+    deliveryman.destroy();
 
     return res.status(204).send();
   }
