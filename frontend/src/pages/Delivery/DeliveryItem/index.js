@@ -34,6 +34,15 @@ export default function DeliveryItem({ data, updateDeliveries }) {
   };
 
   async function handleDelete() {
+    const confirm = window.confirm(
+      'Você tem certeza que deseja deletar essa encomenda?'
+    );
+
+    if (!confirm) {
+      toast.error('Encomenda não deletado!');
+      return;
+    }
+
     try {
       await api.delete(`/deliveries/${data.id}`);
       updateDeliveries();
