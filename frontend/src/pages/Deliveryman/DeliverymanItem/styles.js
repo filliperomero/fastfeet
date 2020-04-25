@@ -58,5 +58,6 @@ export const Avatar = styled.td`
     border-radius: 50%;
     border: 1.5px solid rgba(255, 255, 255, 0.3);
     background: #eee;
+    object-fit: cover;
   }
 `;
