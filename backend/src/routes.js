@@ -45,6 +45,7 @@ routes.use(authMiddleware);
 routes.post('/files', uploads.single('file'), FileController.store);
 
 routes.get('/recipients', RecipientController.index);
+routes.get('/recipients/:id', RecipientController.indexSpecific);
 routes.post('/recipients', ValidateRecipientStore, RecipientController.store);
 routes.put(
   '/recipients/:id',

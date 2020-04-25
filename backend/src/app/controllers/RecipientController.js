@@ -2,6 +2,18 @@ import { Op } from 'sequelize';
 import Recipient from '../models/Recipient';
 
 class RecipientController {
+  async indexSpecific(req, res) {
+    const { id } = req.params;
+
+    const recipient = await Recipient.findByPk(id);
+
+    if (!recipient) {
+      return res.status(404).json({ error: 'Recipient not found' });
+    }
+
+    return res.json(recipient);
+  }
+
   async index(req, res) {
     const { q: recipientName, page = 1 } = req.query;
 
@@ -25,7 +37,13 @@ class RecipientController {
   }
 
   async store(req, res) {
-    // Are we going to check for this recipient on the db?
+    const recipientExists = await Recipient.findOne({
+      where: { name: req.body.name },
+    });
+
+    if (recipientExists) {
+      return res.status(400).json({ error: 'Recipient already exist' });
+    }
 
     const recipient = await Recipient.create(req.body);
 
