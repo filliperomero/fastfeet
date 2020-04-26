@@ -12,6 +12,7 @@ import DeliverymanEdit from '~/pages/DeliverymanEdit';
 import Recipients from '~/pages/Recipients';
 import RecipientAdd from '~/pages/RecipientAdd';
 import RecipientEdit from '~/pages/RecipientEdit';
+import Problems from '~/pages/Problems';
 
 export default function Routes() {
   return (
@@ -46,6 +47,7 @@ export default function Routes() {
         component={RecipientEdit}
         isPrivate
       />
+      <Route path="/problems" exact component={Problems} isPrivate />
     </Switch>
   );
 }
