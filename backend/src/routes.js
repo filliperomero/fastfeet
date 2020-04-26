@@ -52,6 +52,7 @@ routes.put(
   ValidateRecipientUpdate,
   RecipientController.update
 );
+routes.delete('/recipients/:id', RecipientController.delete);
 
 routes.get('/deliveryman', DeliveryManController.index);
 routes.get('/deliveryman/:id', DeliveryManController.indexSpecific);

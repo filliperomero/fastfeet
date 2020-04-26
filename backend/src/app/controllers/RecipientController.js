@@ -1,5 +1,6 @@
 import { Op } from 'sequelize';
 import Recipient from '../models/Recipient';
+import Delivery from '../models/Delivery';
 
 class RecipientController {
   async indexSpecific(req, res) {
@@ -24,10 +25,10 @@ class RecipientController {
               [Op.iLike]: `%${recipientName}%`,
             },
           },
-          offset: (page - 1) * 5,
-          limit: 5,
+          offset: (page - 1) * 10,
+          limit: 10,
         })
-      : await Recipient.findAll({ offset: (page - 1) * 5, limit: 5 });
+      : await Recipient.findAll({ offset: (page - 1) * 10, limit: 10 });
 
     if (!recipients) {
       return res.status(404).json({ error: 'Recipients not found' });
@@ -71,6 +72,28 @@ class RecipientController {
     await recipient.save();
 
     return res.json(recipient);
+  }
+
+  async delete(req, res) {
+    const { id } = req.params;
+
+    const recipient = await Recipient.findByPk(id);
+
+    if (!recipient) {
+      return res.status(404).json({ error: 'Recipient not found' });
+    }
+
+    const delivery = await Delivery.findOne({ where: { recipient_id: id } });
+
+    if (delivery) {
+      return res.status(403).json({
+        error: 'Cannot delete a recipient that has any delivery',
+      });
+    }
+
+    recipient.destroy();
+
+    return res.status(204).send();
   }
 }
 
