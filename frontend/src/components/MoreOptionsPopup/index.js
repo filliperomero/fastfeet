@@ -5,7 +5,7 @@ import Popup from 'reactjs-popup';
 
 import { PopupButton } from './styles';
 
-export default function MoreOptionsPopup({ children, ...rest }) {
+export default function MoreOptionsPopup({ children, customStyle, ...rest }) {
   return (
     <Popup
       trigger={
@@ -14,12 +14,14 @@ export default function MoreOptionsPopup({ children, ...rest }) {
         </PopupButton>
       }
       position="bottom center"
-      contentStyle={{
-        width: '150px',
-        borderRadius: '4px',
-        boxShadow: '0 0 2px rgba(0, 0, 0, .15)',
-        border: 0,
-      }}
+      contentStyle={
+        customStyle || {
+          width: '150px',
+          borderRadius: '4px',
+          boxShadow: '0 0 2px rgba(0, 0, 0, .15)',
+          border: 0,
+        }
+      }
       arrowStyle={{
         boxShadow: '0.5px 0.5px 0px rgba(0, 0, 0, .15)',
       }}
@@ -32,4 +34,9 @@ export default function MoreOptionsPopup({ children, ...rest }) {
 
 MoreOptionsPopup.propTypes = {
   children: PropTypes.element.isRequired,
+  customStyle: PropTypes.object, // eslint-disable-line
+};
+
+MoreOptionsPopup.defaultProps = {
+  customStyle: undefined,
 };
