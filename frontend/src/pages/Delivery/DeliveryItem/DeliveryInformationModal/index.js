@@ -47,7 +47,7 @@ export default function DeliveryInformationModal({ data }) {
         </section>
         <section>
           <strong>Assinatura do destinatário</strong>
-          <img src="https://fakeimg.pl/250x100/" alt="test" />
+          {data.signature && <img src={data.signature.url} alt="Signature" />}
         </section>
       </Content>
     </Popup>
@@ -71,6 +71,9 @@ DeliveryInformationModal.propTypes = {
     }),
     deliveryman: PropTypes.shape({
       name: PropTypes.string,
+    }),
+    signature: PropTypes.shape({
+      url: PropTypes.string,
     }),
   }).isRequired,
 };

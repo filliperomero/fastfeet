@@ -37,6 +37,9 @@ export const Content = styled.div`
 
     img {
       margin: 20px auto;
+      max-width: 300px;
+      max-height: 100px;
+      object-fit: cover;
     }
   }
 `;
