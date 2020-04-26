@@ -57,7 +57,7 @@ class DeliveryProblemController {
 
     const delivery = await Delivery.findByPk(id);
 
-    if (Number(delivery.id) !== Number(deliveryman_id)) {
+    if (Number(delivery.deliveryman_id) !== Number(deliveryman_id)) {
       return res.status(403).json({
         error: "You cannot create problems in deliveries that aren't yours",
       });
@@ -92,6 +92,10 @@ class DeliveryProblemController {
 
     if (!delivery) {
       return res.status(404).json({ error: 'Delivery not found' });
+    }
+
+    if (delivery.canceled_at) {
+      return res.status(400).json({ error: 'Delivery was already canceled' });
     }
 
     delivery.canceled_at = new Date();
