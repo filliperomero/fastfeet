@@ -1,12 +1,19 @@
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Form } from '@unform/web';
 
-// import { Container } from './styles';
+import UnformInput from '~/components/Form/UnformInput';
+
+import { signInRequest } from '~/store/modules/auth/actions';
+
 import logo from '~/assets/logo.png';
 
 export default function SignIn() {
+  const dispatch = useDispatch();
+  const loading = useSelector(state => state.auth.loading);
+
   function handleSubmit({ email, password }) {
-    // Do something
+    dispatch(signInRequest(email, password));
   }
 
   return (
@@ -14,12 +21,18 @@ export default function SignIn() {
       <img src={logo} alt="FastFeet" />
       <Form onSubmit={handleSubmit}>
         <strong>SEU E-MAIL</strong>
-        <input name="email" type="email" placeholder="exemplo@email.com" />
+        <UnformInput
+          name="email"
+          type="email"
+          placeholder="exemplo@email.com"
+        />
 
         <strong>SUA SENHA</strong>
-        <input name="password" type="password" placeholder="******" />
+        <UnformInput name="password" type="password" placeholder="******" />
 
-        <button type="submit">Entrar no Sistema</button>
+        <button type="submit" disabled={loading}>
+          {loading ? 'Loading...' : 'Entrar no sistema'}
+        </button>
       </Form>
     </>
   );
