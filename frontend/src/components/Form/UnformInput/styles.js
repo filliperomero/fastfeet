@@ -23,3 +23,8 @@ export const Container = styled.div`
     }
   }
 `;
+
+export const Error = styled.span`
+  color: #de3b3b;
+  margin-bottom: 5px;
+`;

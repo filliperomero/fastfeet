@@ -24,3 +24,8 @@ export const InputMask = styled(ReactInputMask)`
     color: #999;
   }
 `;
+
+export const Error = styled.span`
+  color: #de3b3b;
+  margin-bottom: 5px;
+`;

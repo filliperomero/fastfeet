@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useField } from '@unform/core';
 
-import { Container, InputMask } from './styles';
+import { Container, InputMask, Error } from './styles';
 
 export default function UnformMaskInput({ name, label, ...rest }) {
   const inputRef = useRef(null);
@@ -31,7 +31,7 @@ export default function UnformMaskInput({ name, label, ...rest }) {
         defaultValue={defaultValue}
         {...rest}
       />
-      {error && <span className="error">{error}</span>}
+      {error && <Error>{error}</Error>}
     </Container>
   );
 }

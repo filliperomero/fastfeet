@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useField } from '@unform/core';
 
-import { Container } from './styles';
+import { Container, Error } from './styles';
 
 export default function UnformInput({ name, label, ...rest }) {
   const inputRef = useRef(null);
@@ -25,7 +25,7 @@ export default function UnformInput({ name, label, ...rest }) {
         defaultValue={defaultValue}
         {...rest}
       />
-      {error && <span className="error">{error}</span>}
+      {error && <Error>{error}</Error>}
     </Container>
   );
 }

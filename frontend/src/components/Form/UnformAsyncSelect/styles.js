@@ -12,4 +12,7 @@ export const Label = styled.label`
   margin-bottom: 10px;
 `;
 
-export const Error = styled.span``;
+export const Error = styled.span`
+  color: #de3b3b;
+  margin-bottom: 5px;
+`;
