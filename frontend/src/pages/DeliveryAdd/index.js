@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import { toast } from 'react-toastify';
+import * as Yup from 'yup';
 
 import DefaultForm from '~/components/DefaultForm';
 import UnformInput from '~/components/Form/UnformInput';
@@ -37,13 +38,33 @@ export default function DeliveryAdd() {
   }
 
   async function handleSubmit(data) {
+    formRef.current.setErrors({});
     try {
-      // TODO: Precisa realizar validacoes
+      const schema = Yup.object().shape({
+        recipient_id: Yup.string().required('Destinatário obrigatório'),
+        deliveryman_id: Yup.string().required('Entregador obrigatório'),
+        product: Yup.string().required('Descrição do produto é obrigatório'),
+      });
+
+      await schema.validate(data, {
+        abortEarly: false,
+      });
+
       await api.post('/deliveries', data);
       history.push('/deliveries');
       toast.success('Delivery created successfully');
     } catch (error) {
-      toast.error(formatErrorAPI(error));
+      if (error instanceof Yup.ValidationError) {
+        const errorMessages = {};
+
+        error.inner.forEach(err => {
+          errorMessages[err.path] = err.message;
+        });
+
+        formRef.current.setErrors(errorMessages);
+      } else {
+        toast.error(formatErrorAPI(error));
+      }
     }
   }
 
