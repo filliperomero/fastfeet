@@ -21,7 +21,7 @@ export default function RecipientAdd() {
       const schema = Yup.object().shape({
         name: Yup.string().required('Nome obrigatório'),
         street: Yup.string().required('Rua obrigatório'),
-        number: Yup.string().required('Número obrigatório'),
+        number: Yup.number().required('Número obrigatório'),
         complement: Yup.string().required('Complemento obrigatório'),
         city: Yup.string().required('Cidade obrigatório'),
         state: Yup.string().required('Estado obrigatório'),

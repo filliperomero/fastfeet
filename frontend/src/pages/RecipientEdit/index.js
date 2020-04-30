@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
+import * as Yup from 'yup';
 
 import DefaultForm from '~/components/DefaultForm';
 import UnformInput from '~/components/Form/UnformInput';
@@ -17,14 +18,37 @@ export default function RecipientEdit({ match }) {
   const formRef = useRef(null);
 
   async function handleSubmit(data) {
+    formRef.current.setErrors({});
     try {
-      // TODO: Precisa realizar validacoes
+      const schema = Yup.object().shape({
+        name: Yup.string().required('Nome obrigatório'),
+        street: Yup.string().required('Rua obrigatório'),
+        number: Yup.number().required('Número obrigatório'),
+        complement: Yup.string().required('Complemento obrigatório'),
+        city: Yup.string().required('Cidade obrigatório'),
+        state: Yup.string().required('Estado obrigatório'),
+        zipCode: Yup.string().required('CEP obrigatório'),
+      });
+
+      await schema.validate(data, {
+        abortEarly: false,
+      });
 
       await api.put(`/recipients/${id}`, data);
       history.push('/recipients');
       toast.success('Recipient updated successfully');
     } catch (error) {
-      toast.error(formatErrorAPI(error));
+      if (error instanceof Yup.ValidationError) {
+        const errorMessages = {};
+
+        error.inner.forEach(err => {
+          errorMessages[err.path] = err.message;
+        });
+
+        formRef.current.setErrors(errorMessages);
+      } else {
+        toast.error(formatErrorAPI(error));
+      }
     }
   }
 
