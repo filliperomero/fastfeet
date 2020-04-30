@@ -21,7 +21,7 @@ Fastfeet
   <a href="https://insomnia.rest/run/?label=&uri=https%3A%2F%2Fgithub.com%2Ffilliperomero%2Ffastfeet%2Fblob%2Fmaster%2F.github%2FInsomnia.json" target="_blank"><img src="https://insomnia.rest/images/run.svg" alt="Run in Insomnia"></a>
 </p>
 
-<div>
+<div align="center">
   <img src=".github/web.gif" alt="demo-web" height="425">
   <p>Attention: Colors on .gif are not accurate</p>
 </div>
