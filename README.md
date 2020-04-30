@@ -76,5 +76,7 @@ In a future update, we will add the mobile version where the deliveryman will be
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](https://opensource.org/licenses/MIT) page for details.
+
 <hr>
+
 Made with 💜 by [Fillipe Romero](linkedin.com/in/filliperomero)
