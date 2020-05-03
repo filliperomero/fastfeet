@@ -13,7 +13,7 @@ Fastfeet
     <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License MIT">
   </a>
   <a href="linkedin.com/in/filliperomero">
-    <img alt="Made by Rocketseat" src="https://img.shields.io/badge/Made%20by-Fillipe%20Romero-blueviolet">
+    <img alt="Made by Fillipe Romero" src="https://img.shields.io/badge/Made%20by-Fillipe%20Romero-blueviolet">
   </a>
 </p>
 
